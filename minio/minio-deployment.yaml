@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: minio/minio:latest
+          args:
+            - server
+            - /data
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-config
+                  key: auth.rootUser
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-config
+                  key: auth.rootPassword
+          ports:
+            - containerPort: 9000
+              name: minio-port
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+            - name: minio-config
+              mountPath: /etc/minio/config.yaml
+              subPath: config.yaml
+      volumes:
+        - name: minio-data
+          emptyDir: {}
+        - name: minio-config
+          configMap:
+            name: minio-config

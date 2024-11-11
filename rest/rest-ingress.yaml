@@ -1,16 +1,18 @@
-#
-# See https://kubernetes.io/docs/concepts/services-networking/ingress/
-#
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-ingress
+  name: rest-server-ingress
   annotations:
-    # use the shared ingress-nginx
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-body-size: 16m
+    nginx.ingress.kubernetes.io/proxy-body-size: 16m  # Allows large request bodies
 spec:
   rules:
-#
-# Your ingress rules here
-#
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rest-server
+                port:
+                  number: 80

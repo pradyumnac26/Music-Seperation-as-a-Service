@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demucs-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demucs-worker
+  template:
+    metadata:
+      labels:
+        app: demucs-worker
+    spec:
+      containers:
+      - name: demucs-worker
+        image: govardhannm/demucs-worker:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: redis
+        - name: MINIO_HOST
+          value: minio-proj.minio-ns.svc.cluster.local
+        - name: MINIO_PORT
+          value: "9001"
+        - name: MINIO_ACCESS_KEY
+          value: "rootuser"
+        - name: MINIO_SECRET_KEY
+          value: "rootpass123"
+        volumeMounts:
+          - name: demucs-models
+            mountPath: /data/models
+      volumes:
+      - name: demucs-models
+        emptyDir: {}

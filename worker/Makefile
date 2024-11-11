@@ -1,5 +1,5 @@
 VERSION=v1
-DOCKERUSER=YOUR_DOCKER_USERNAME_HERE
+DOCKERUSER=govardhannm
 
 build:
 	docker build -f Dockerfile -t demucs-worker .
@@ -8,3 +8,15 @@ push:
 	docker push $(DOCKERUSER)/demucs-worker:$(VERSION)
 	docker tag demucs-worker $(DOCKERUSER)/demucs-worker:latest
 	docker push $(DOCKERUSER)/demucs-worker:latest
+
+deploy:
+	kubectl apply -f worker-deployment.yaml
+
+clean:
+	kubectl delete deployment demucs-worker
+
+redo:
+	make clean
+	make build
+	make push
+	make deploy
