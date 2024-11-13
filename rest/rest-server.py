@@ -8,7 +8,9 @@ from minio.error import S3Error
 
 app = Flask(__name__)
 
+
 r = redis.Redis(host='redis', port=6379, db=0)
+
 
 minio_client = Minio(
     "minio-proj.minio-ns.svc.cluster.local:9000",  # MinIO service URL

@@ -10,8 +10,8 @@ from demucs.apply import apply_model
 logging.basicConfig(level=logging.DEBUG)
 
 # Environment Variables
-redis_host = os.getenv('REDIS_HOST', 'redis')
-minio_host = os.getenv('MINIO_HOST', 'minio') + ":9000"
+redis_host = os.getenv('REDIS_HOST', 'redis') + ":6379"
+minio_host = os.getenv('MINIO_HOST', 'minio-proj.minio-ns.svc.cluster.local') + ":9000"
 minio_access_key = os.getenv('MINIO_ACCESS_KEY', 'rootuser')
 minio_secret_key = os.getenv('MINIO_SECRET_KEY', 'rootpass123')
 
